@@ -48,7 +48,13 @@ def insert_data_from_excel(db_connection, excel_file):
                 
                 # Insert data into the corresponding table
                 query = f'INSERT INTO "{sheet_name}" ({columns}) VALUES ({placeholders})'
-                cursor.execute(query, values)
+                try:
+                    cursor.execute(query, values)
+                except sqlite3.IntegrityError as e:
+                    if 'UNIQUE constraint failed' in str(e):
+                        print(f"Skipping row due to UNIQUE constraint violation: {row.to_dict()}")
+                    else:
+                        print(f"Error inserting row {row.to_dict()}: {e}")
             
             print(f"Data inserted for table: {sheet_name}")
         
@@ -56,6 +62,7 @@ def insert_data_from_excel(db_connection, excel_file):
         db_connection.commit()
     except Exception as e:
         print(f"Error inserting data: {e}")
+
 
 
 # Main function to populate the database
@@ -82,7 +89,7 @@ def populate_database(excel_file, db_file):
 
 # Run the code
 if __name__ == "__main__":
-    excel_file = 'Movie_Database_2.xlsx'  # Path to your Excel file
+    excel_file = 'MovieDataBase.xlsx'  # Path to your Excel file
     db_file = 'movie_theater.db'         # Path to your SQLite database
     
     populate_database(excel_file, db_file)
