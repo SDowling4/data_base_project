@@ -1,19 +1,26 @@
 CREATE TABLE Movies (
-    movie_ID INTEGER PRIMARY KEY,
+    movies_ID INTEGER PRIMARY KEY,
     title TEXT NOT NULL,
     genre_ID INTEGER,
     rating TEXT,
     FOREIGN KEY (genre_ID) REFERENCES Genre(genre_ID)
 );
 
-CREATE TABLE Genre (
-    genre_ID INTEGER PRIMARY KEY,
-    genreName TEXT NOT NULL
+CREATE TABLE MovieTime (
+    movie_ID INTEGER,
+    start_time TEXT NOT NULL,
+    movie_length INTEGER NOT NULL,
+    day TEXT NOT NULL,
+    PRIMARY KEY (movie_ID, start_time, day), 
+    FOREIGN KEY (movie_ID) REFERENCES Movies(movies_ID)
 );
 
-CREATE TABLE Membership (
-    membership_ID INTEGER PRIMARY KEY,
-    type TEXT NOT NULL
+CREATE TABLE Seat (
+    theater_ID INTEGER,
+    seat_number INTEGER,
+    row_letter TEXT NOT NULL,
+    PRIMARY KEY (theater_ID, seat_number, row_letter), 
+    FOREIGN KEY (theater_ID) REFERENCES Theater(theater_ID)
 );
 
 CREATE TABLE Customer (
@@ -24,41 +31,24 @@ CREATE TABLE Customer (
     FOREIGN KEY (membership_ID) REFERENCES Membership(membership_ID)
 );
 
-CREATE TABLE Theater (
-    theater_ID INTEGER PRIMARY KEY ,
-    location TEXT NOT NULL
+CREATE TABLE Genre (
+    genre_ID INTEGER PRIMARY KEY,
+    genre_name TEXT NOT NULL
 );
 
 CREATE TABLE Employee (
-    employee_ID INTEGER PRIMARY KEY ,
+    employee_ID INTEGER PRIMARY KEY,
     position TEXT NOT NULL,
     name TEXT NOT NULL,
     wage REAL
 );
 
-CREATE TABLE MovieTime (
-    movietime_ID INTEGER PRIMARY KEY,
-    start_time TEXT NOT NULL,
-    day TEXT NOT NULL,
-    movielength INTEGER NOT NULL
+CREATE TABLE Theater (
+    theater_ID INTEGER PRIMARY KEY,
+    room TEXT NOT NULL
 );
 
-CREATE TABLE Tickets (
-    ticket_ID INTEGER PRIMARY KEY,
-    customer_ID INTEGER,
-    movie_time TEXT,
-    movie_name TEXT,
-    price REAL,
-    seats INTEGER,
-    FOREIGN KEY (customer_ID) REFERENCES Customer(customer_ID)
-);
-
-CREATE TABLE Seat (
-    seat_num INTEGER PRIMARY KEY,
-    row_letter TEXT NOT NULL
-);
-
-CREATE TABLE Rating (
-    rating_ID INTEGER PRIMARY KEY,
-    movies TEXT NOT NULL
+CREATE TABLE Membership (
+    membership_ID INTEGER PRIMARY KEY,
+    membership_name TEXT NOT NULL
 );
